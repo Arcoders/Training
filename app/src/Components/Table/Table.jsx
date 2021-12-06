@@ -60,15 +60,15 @@ function Table({ data: tableData, options }) {
         <thead>
           <tr>
             {options.columns.map((column) => (
-              <th>{column}</th>
+              <th key={column}>{column}</th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {tableBody.map((row) => (
-            <tr>
-              {options.rowKeys.map((key) => (
-                <td>{row[key]}</td>
+          {tableBody.map((row, index) => (
+            <tr key={index}>
+              {options.rowKeys.map(key => (
+                <td key={row[key]}>{row[key]}</td>
               ))}
             </tr>
           ))}

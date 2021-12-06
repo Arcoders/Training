@@ -4,13 +4,13 @@ class SimpleChartPlot {
     this.xAxis = xAxis;
     this.yAxis = yAxis;
     this.sections = yAxis.length;
-    this.Val_max = 100;
-    this.Val_min = 0;
-    this.stepSize = 5;
+    this.max = 10;
+    this.min = 0;
+    this.steps = 5;
     this.columnSize = 50;
     this.rowSize = 50;
     this.margin = 20;
-    this.context = canvas.getContext("2d");
+    this.ctx = canvas.getContext("2d");
     this.canvas.width = this.canvas.parentElement.clientWidth;
     this.formatPrices();
   }
@@ -18,12 +18,13 @@ class SimpleChartPlot {
   setScale() {
     this.yScale =
       (this.canvas.height - this.columnSize - this.margin) /
-      (this.Val_max - this.Val_min);
+      (this.max - this.min);
     this.xScale = (this.canvas.width - this.rowSize) / this.sections;
   }
 
   beginPath() {
-    this.context.beginPath();
+    this.ctx.beginPath();
+    this.ctx.lineWidth = 0.7;
   }
 
   onResize() {
@@ -34,27 +35,27 @@ class SimpleChartPlot {
   }
 
   closePahtAndTranslate() {
-    this.context.stroke();
-    this.context.translate(
+    this.ctx.stroke();
+    this.ctx.translate(
       this.rowSize,
-      this.canvas.height + this.Val_min * this.yScale
+      this.canvas.height + this.min * this.yScale
     );
-    this.context.scale(1, -1 * this.yScale);
+    this.ctx.scale(1, -1 * this.yScale);
   }
 
   drawHorizontalLines() {
     var count = 0;
     for (
-      let scale = this.Val_max;
-      scale >= this.Val_min;
-      scale = scale - this.stepSize
+      let scale = this.max;
+      scale >= this.min;
+      scale = scale - this.steps
     ) {
-      var y = this.columnSize + this.yScale * count * this.stepSize;
+      var y = this.columnSize + this.yScale * count * this.steps;
       const text = Number(scale / 10).toFixed(2);
-      this.context.fillText(text, this.margin, y);
+      this.ctx.fillText(text, this.margin, y);
       if (Number.isInteger(scale / 10)) {
-        this.context.moveTo(this.rowSize, y);
-        this.context.lineTo(this.canvas.width, y);
+        this.ctx.moveTo(this.rowSize, y);
+        this.ctx.lineTo(this.canvas.width, y);
       }
 
       count++;
@@ -69,11 +70,11 @@ class SimpleChartPlot {
       const newMargin =
         i % 2 == 0
           ? this.columnSize - this.margin
-          : this.columnSize - this.margin * 2;
+          : '';
 
-      this.context.fillText(text, x, this.columnSize - newMargin);
-      this.context.moveTo(x, this.columnSize);
-      this.context.lineTo(x, this.canvas.height - this.margin);
+      this.ctx.fillText(text, x, this.columnSize - newMargin);
+      this.ctx.moveTo(x, this.columnSize);
+      this.ctx.lineTo(x, this.canvas.height - this.margin);
     }
   }
 
@@ -84,24 +85,29 @@ class SimpleChartPlot {
         return price * 10;
       }
       return undefined;
-    });
+    }).filter(Boolean);
+
+    this.max = Math.max.apply(null, this.yAxis) + 30;
+    this.steps = this.max / 5
+
+    this.sections = this.yAxis.length;
   }
 
   setDefaultStyles() {
-    this.context.fillStyle = "#273043";
-    this.context.font = "14px Arial";
-    this.context.strokeStyle = "#f1f1f1";
+    this.ctx.fillStyle = "#273043";
+    this.ctx.font = "14px Arial";
+    this.ctx.strokeStyle = "#f1f1f1";
   }
 
   drawLines() {
     this.beginPath();
-    this.context.strokeStyle = "#55868c";
-    this.context.moveTo(0, this.yAxis[0]);
+    this.ctx.strokeStyle = "#55868c";
+    this.ctx.moveTo(0, this.yAxis[0]);
 
     for (let i = 1; i < this.sections; i++) {
-      this.context.lineTo(i * this.xScale, this.yAxis[i]);
+      this.ctx.lineTo(i * this.xScale, this.yAxis[i]);
     }
-    this.context.stroke();
+    this.ctx.stroke();
   }
 
   drawGrid() {

@@ -32,7 +32,7 @@ function ChartPlot({ data }) {
   const chartRetailerClassName = (retailer) =>
     retailer === selectedRetailer ? "chart__retailer--active" : "";
 
-  const { retailerNames, products } = parseOffers(data);
+  const { retailerNames, products, yAxis } = parseOffers(data);
 
   return (
     <div className="container">
@@ -44,7 +44,7 @@ function ChartPlot({ data }) {
           onChange={handleSelectProduct}
         >
           {products.map((product) => (
-            <option value={product}>{product}</option>
+            <option key={product} value={product}>{product}</option>
           ))}
         </select>
       </div>
@@ -53,6 +53,7 @@ function ChartPlot({ data }) {
         <p>
           {retailerNames.map((retailer) => (
             <span
+              key={retailer}
               className={`chart__retailer ${chartRetailerClassName(retailer)}`}
               onClick={() => setSelectedRetailer(retailer)}
             >
