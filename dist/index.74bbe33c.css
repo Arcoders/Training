@@ -1,7 +1,4 @@
-body {
-  background: #F8F9FB;
-}
-
+@import "https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap";
 .container {
   background: white;
   padding: 40px;
@@ -121,9 +118,17 @@ td, th {
 tr:nth-child(even) {
   background-color: #F8F9FB;
 }
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
 body {
   font-family: "Roboto", sans-serif;
+  background: #F8F9FB;
+  margin: 0;
+  padding: 0;
 }
-
-/*# sourceMappingURL=/main.ff46185c.css.map */
+.loading {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/*# sourceMappingURL=index.74bbe33c.css.map */

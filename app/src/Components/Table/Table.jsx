@@ -11,7 +11,7 @@ function Table({ data: tableData, options }) {
     itemsPerPage: options.itemsPerPage,
   });
 
-  const searchValue = useDebounce(search, 2000);
+  const searchValue = useDebounce(search, 1000);
 
   useEffect(() => {
     if (searchValue) {
@@ -48,6 +48,7 @@ function Table({ data: tableData, options }) {
   const tableBody = getTableBody();
   const totalPages = Math.round(data.length / options.itemsPerPage);
 
+  console.log(333)
   return (
     <div className="table container">
       <input

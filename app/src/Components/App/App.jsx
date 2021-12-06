@@ -14,8 +14,14 @@ function App() {
 
   return (
     <>
-      <Table data={data} options={TABLE_OPTIONS} />
-      <ChartPlot data={data} options={CHART_PLOT_OPTIONS} />
+      {!!data.length ?
+        <>
+            <Table data={data} options={TABLE_OPTIONS} />
+            <ChartPlot data={data} options={CHART_PLOT_OPTIONS} />
+        </>
+        : 
+        <div className="loading">Loading...</div>
+      }
     </>
   );
 }
