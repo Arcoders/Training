@@ -1,27 +1,21 @@
 import React, { useState, useRef, useEffect } from "react";
 import SimpleChartPlot from "../../utils/charts/plot";
 import parseOffers from "../../utils/parsers/offers";
+import { RETAILER, PRODUCT } from "../constants";
 import "./ChartPlot.sass";
 
-function ChartPlot({ data }) {
-  const [selectedRetailer, setSelectedRetailer] = useState("Amazon ES");
-  const [selectedProduct, setSelectedProduct] = useState(
-    "Maestros de Hojiblanca El Nuestro 1L"
-  );
+function ChartPlot({ data , options }) {
+  const [selectedRetailer, setSelectedRetailer] = useState(RETAILER);
+  const [selectedProduct, setSelectedProduct] = useState(PRODUCT);
   const canvasRef = useRef(null);
+
+  const { retailerNames, products, xAxis, yAxis } = parseOffers(data, selectedRetailer, selectedProduct);
+
 
   useEffect(() => {
     if (canvasRef && canvasRef.current && data.length) {
-      const { xAxis, yAxis } = parseOffers(
-        data,
-        selectedRetailer,
-        selectedProduct
-      );
-      const simpleChartPlot = new SimpleChartPlot(
-        canvasRef.current,
-        xAxis,
-        yAxis
-      );
+      const plotConfiguration = {...options, xAxis, yAxis};
+      const simpleChartPlot = new SimpleChartPlot(canvasRef.current, plotConfiguration);
       simpleChartPlot.onResize();
       simpleChartPlot.draw();
     }
@@ -31,8 +25,6 @@ function ChartPlot({ data }) {
     setSelectedProduct(value);
   const chartRetailerClassName = (retailer) =>
     retailer === selectedRetailer ? "chart__retailer--active" : "";
-
-  const { retailerNames, products, yAxis } = parseOffers(data);
 
   return (
     <div className="container">
@@ -49,7 +41,8 @@ function ChartPlot({ data }) {
         </select>
       </div>
       <div className="chart">
-        <canvas ref={canvasRef} height="500" />
+        {!!yAxis.length ?  <canvas ref={canvasRef} height="500" /> : <div className="chart__empty">There is no data to show</div>}
+       
         <p>
           {retailerNames.map((retailer) => (
             <span

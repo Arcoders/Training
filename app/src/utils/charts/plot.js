@@ -1,25 +1,21 @@
+import { formateDate, removeEmptyPrices } from "./helpers";
+
 class SimpleChartPlot {
-  constructor(canvas, xAxis, yAxis) {
+  constructor(canvas, config) {
     this.canvas = canvas;
-    this.xAxis = xAxis;
-    this.yAxis = yAxis;
-    this.sections = yAxis.length;
-    this.max = 10;
-    this.min = 0;
-    this.steps = 5;
-    this.columnSize = 50;
-    this.rowSize = 50;
-    this.margin = 20;
+    this.config = { ...config };
     this.ctx = canvas.getContext("2d");
-    this.canvas.width = this.canvas.parentElement.clientWidth;
+    this.priceMargin = config.priceMargin;
+    this.canvas.width = canvas.parentElement.clientWidth;
     this.formatPrices();
   }
 
   setScale() {
     this.yScale =
-      (this.canvas.height - this.columnSize - this.margin) /
-      (this.max - this.min);
-    this.xScale = (this.canvas.width - this.rowSize) / this.sections;
+      (this.canvas.height - this.config.columnSize - this.config.margin) /
+      (this.config.max - this.config.min);
+    this.config.xScale =
+      (this.canvas.width - this.config.rowSize) / this.sections;
   }
 
   beginPath() {
@@ -37,55 +33,54 @@ class SimpleChartPlot {
   closePahtAndTranslate() {
     this.ctx.stroke();
     this.ctx.translate(
-      this.rowSize,
-      this.canvas.height + this.min * this.yScale
+      this.config.rowSize,
+      this.canvas.height + this.config.min * this.yScale
     );
     this.ctx.scale(1, -1 * this.yScale);
   }
 
   drawHorizontalLines() {
-    var count = 0;
+    var lines = 0;
     for (
-      let scale = this.max;
-      scale >= this.min;
+      let scale = this.config.max;
+      scale >= this.config.min;
       scale = scale - this.steps
     ) {
-      var y = this.columnSize + this.yScale * count * this.steps;
+      var y = this.config.columnSize + this.yScale * lines * this.steps;
       const text = Number(scale / 10).toFixed(2);
-      this.ctx.fillText(text, this.margin, y);
-      this.ctx.moveTo(this.rowSize, y);
+
+      this.ctx.fillText(text, this.config.margin, y);
+      this.ctx.moveTo(this.config.rowSize, y);
       this.ctx.lineTo(this.canvas.width, y);
-      count++;
+
+      lines++;
     }
   }
 
   drawVerticalLines() {
     for (let i = 2; i <= this.sections; i++) {
-      var x = i * this.xScale;
-      const text = this.xAxis[i] ? this.xAxis[i].slice(5) : this.xAxis[i] || "";
+      var x = i * this.config.xScale;
 
-        if (i % 2 == 0) {
-            this.ctx.fillText(text.replace('-', '/'), x, this.columnSize);
-        }
+      const date = formateDate(this.config.xAxis[i]);
+      if (this.config.xAxis.length <= 30) {
+        this.config.skip = 1;
+      }
 
-      this.ctx.moveTo(x, this.columnSize);
-      this.ctx.lineTo(x, this.canvas.height - this.margin);
+      if (i % this.config.skip == 0) {
+        this.ctx.fillText(date, x, this.config.columnSize - this.config.margin);
+      }
+
+      this.ctx.moveTo(x, this.config.columnSize);
+      this.ctx.lineTo(x, this.canvas.height - this.config.margin);
     }
   }
 
   formatPrices() {
-    this.yAxis = this.yAxis.map((current) => {
-      const [price] = current.map((current) => current.total_price);
-      if (price) {
-        return price * 10;
-      }
-      return undefined;
-    }).filter(Boolean);
-
-    this.max = Math.max.apply(null, this.yAxis) + 30;
-    this.steps = this.max / 5
-
-    this.sections = this.yAxis.length;
+    this.config.yAxis = removeEmptyPrices(this.config.yAxis);
+    this.config.max =
+      Math.max.apply(null, this.config.yAxis) + this.priceMargin;
+    this.steps = this.config.max / 5;
+    this.sections = this.config.yAxis.length;
   }
 
   setDefaultStyles() {
@@ -97,10 +92,10 @@ class SimpleChartPlot {
   drawLines() {
     this.beginPath();
     this.ctx.strokeStyle = "#55868c";
-    this.ctx.moveTo(0, this.yAxis[0]);
+    this.ctx.moveTo(0, this.config.yAxis[0]);
 
     for (let i = 1; i < this.sections; i++) {
-      this.ctx.lineTo(i * this.xScale, this.yAxis[i]);
+      this.ctx.lineTo(i * this.config.xScale, this.config.yAxis[i]);
     }
     this.ctx.stroke();
   }

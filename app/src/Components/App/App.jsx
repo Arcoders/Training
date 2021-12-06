@@ -3,7 +3,7 @@ import ChartPlot from "../ChartPlot";
 import Table from "../Table";
 import API from "../../services";
 import "./App.sass";
-import { TABLE_OPTIONS } from "./constants";
+import { CHART_PLOT_OPTIONS, TABLE_OPTIONS } from "../constants";
 
 function App() {
   const [data, setData] = useState([]);
@@ -15,7 +15,7 @@ function App() {
   return (
     <>
       <Table data={data} options={TABLE_OPTIONS} />
-      <ChartPlot data={data} />
+      <ChartPlot data={data} options={CHART_PLOT_OPTIONS} />
     </>
   );
 }
