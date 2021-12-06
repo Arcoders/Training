@@ -15,5 +15,10 @@ Table and Chart are reusable components, implemented without libraries for the p
 ## Pending
 - Refactor
 - Handle chart with empty data
-- Improve the logic of drawing axes
+- Improve the logic of drawing axes and the projection of data
 
+### Table
+![image info](./doc/img/table.png)
+
+### Chart
+![image info](./doc/img/plot.png)

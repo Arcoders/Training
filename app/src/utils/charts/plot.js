@@ -53,11 +53,8 @@ class SimpleChartPlot {
       var y = this.columnSize + this.yScale * count * this.steps;
       const text = Number(scale / 10).toFixed(2);
       this.ctx.fillText(text, this.margin, y);
-      if (Number.isInteger(scale / 10)) {
-        this.ctx.moveTo(this.rowSize, y);
-        this.ctx.lineTo(this.canvas.width, y);
-      }
-
+      this.ctx.moveTo(this.rowSize, y);
+      this.ctx.lineTo(this.canvas.width, y);
       count++;
     }
   }
@@ -67,12 +64,10 @@ class SimpleChartPlot {
       var x = i * this.xScale;
       const text = this.xAxis[i] ? this.xAxis[i].slice(5) : this.xAxis[i] || "";
 
-      const newMargin =
-        i % 2 == 0
-          ? this.columnSize - this.margin
-          : '';
+        if (i % 2 == 0) {
+            this.ctx.fillText(text.replace('-', '/'), x, this.columnSize);
+        }
 
-      this.ctx.fillText(text, x, this.columnSize - newMargin);
       this.ctx.moveTo(x, this.columnSize);
       this.ctx.lineTo(x, this.canvas.height - this.margin);
     }
