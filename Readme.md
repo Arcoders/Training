@@ -9,8 +9,7 @@ npm start
 
 ## Notes
 
-Notes:
-Table and Chart are reusable components, implemented without libraries for the purpose of practice.
+The table and Chart are reusable components, implemented without libraries for the purpose of practice.
 
 ### Table
 ![image info](./doc/img/table.png)

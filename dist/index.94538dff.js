@@ -22842,7 +22842,6 @@ function ChartPlot({ data , options  }) {
     const [selectedProduct, setSelectedProduct] = _react.useState(_constants.PRODUCT);
     const canvasRef = _react.useRef(null);
     const { retailerNames , products , xAxis , yAxis  } = _offersDefault.default(data, selectedRetailer, selectedProduct);
-    console.log(yAxis, 9999);
     _react.useEffect(()=>{
         if (canvasRef && canvasRef.current && data.length) {
             const plotConfiguration = {
@@ -22867,7 +22866,7 @@ function ChartPlot({ data , options  }) {
         className: "container",
         __source: {
             fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-            lineNumber: 37,
+            lineNumber: 35,
             columnNumber: 5
         },
         __self: this,
@@ -22876,7 +22875,7 @@ function ChartPlot({ data , options  }) {
                 className: "search",
                 __source: {
                     fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                    lineNumber: 38,
+                    lineNumber: 36,
                     columnNumber: 7
                 },
                 __self: this,
@@ -22884,7 +22883,7 @@ function ChartPlot({ data , options  }) {
                     /*#__PURE__*/ _jsxRuntime.jsx("h3", {
                         __source: {
                             fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                            lineNumber: 39,
+                            lineNumber: 37,
                             columnNumber: 9
                         },
                         __self: this,
@@ -22896,7 +22895,7 @@ function ChartPlot({ data , options  }) {
                         onChange: handleSelectProduct,
                         __source: {
                             fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                            lineNumber: 40,
+                            lineNumber: 38,
                             columnNumber: 9
                         },
                         __self: this,
@@ -22904,7 +22903,7 @@ function ChartPlot({ data , options  }) {
                                 value: product,
                                 __source: {
                                     fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                                    lineNumber: 46,
+                                    lineNumber: 44,
                                     columnNumber: 13
                                 },
                                 __self: this,
@@ -22918,7 +22917,7 @@ function ChartPlot({ data , options  }) {
                 className: "chart",
                 __source: {
                     fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                    lineNumber: 52,
+                    lineNumber: 50,
                     columnNumber: 7
                 },
                 __self: this,
@@ -22928,7 +22927,7 @@ function ChartPlot({ data , options  }) {
                         height: "500",
                         __source: {
                             fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                            lineNumber: 54,
+                            lineNumber: 52,
                             columnNumber: 11
                         },
                         __self: this
@@ -22936,7 +22935,7 @@ function ChartPlot({ data , options  }) {
                         className: "chart__empty",
                         __source: {
                             fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                            lineNumber: 56,
+                            lineNumber: 54,
                             columnNumber: 11
                         },
                         __self: this,
@@ -22945,7 +22944,7 @@ function ChartPlot({ data , options  }) {
                     /*#__PURE__*/ _jsxRuntime.jsx("p", {
                         __source: {
                             fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                            lineNumber: 58,
+                            lineNumber: 56,
                             columnNumber: 9
                         },
                         __self: this,
@@ -22955,7 +22954,7 @@ function ChartPlot({ data , options  }) {
                                 ,
                                 __source: {
                                     fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                                    lineNumber: 60,
+                                    lineNumber: 58,
                                     columnNumber: 13
                                 },
                                 __self: this,
