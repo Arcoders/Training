@@ -19,7 +19,8 @@ The table and Chart are reusable components, implemented without libraries for t
 
 ## New Updates
 - Improve the logic of drawing axes and the projection of data.
-- Handle chart with empty data add auto zoom.
+- Handle chart with empty data.
+- Enable auto zoom on small chunks of data.
 - Minimize the number of renders.
 - Use useDebounce for search.
 
