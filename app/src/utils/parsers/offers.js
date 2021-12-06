@@ -1,5 +1,3 @@
-const IN_STOCK = "InStock";
-
 function addElementToArray(array, element) {
   if (!array.includes(element)) {
     array.push(element);
@@ -35,7 +33,7 @@ function sortAndGetInStockOffers(data) {
       offerCopy.fetch_datetime = offer.fetch_datetime.slice(0, 10);
       return offerCopy;
     })
-  ).filter((offer) => offer.stock_info === IN_STOCK && !!offer.total_price);
+  );
 }
 
 function populateOffersByDate({

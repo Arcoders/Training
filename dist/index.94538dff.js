@@ -22842,6 +22842,7 @@ function ChartPlot({ data , options  }) {
     const [selectedProduct, setSelectedProduct] = _react.useState(_constants.PRODUCT);
     const canvasRef = _react.useRef(null);
     const { retailerNames , products , xAxis , yAxis  } = _offersDefault.default(data, selectedRetailer, selectedProduct);
+    console.log(yAxis, 9999);
     _react.useEffect(()=>{
         if (canvasRef && canvasRef.current && data.length) {
             const plotConfiguration = {
@@ -22866,7 +22867,7 @@ function ChartPlot({ data , options  }) {
         className: "container",
         __source: {
             fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-            lineNumber: 35,
+            lineNumber: 37,
             columnNumber: 5
         },
         __self: this,
@@ -22875,7 +22876,7 @@ function ChartPlot({ data , options  }) {
                 className: "search",
                 __source: {
                     fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                    lineNumber: 36,
+                    lineNumber: 38,
                     columnNumber: 7
                 },
                 __self: this,
@@ -22883,7 +22884,7 @@ function ChartPlot({ data , options  }) {
                     /*#__PURE__*/ _jsxRuntime.jsx("h3", {
                         __source: {
                             fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                            lineNumber: 37,
+                            lineNumber: 39,
                             columnNumber: 9
                         },
                         __self: this,
@@ -22895,7 +22896,7 @@ function ChartPlot({ data , options  }) {
                         onChange: handleSelectProduct,
                         __source: {
                             fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                            lineNumber: 38,
+                            lineNumber: 40,
                             columnNumber: 9
                         },
                         __self: this,
@@ -22903,7 +22904,7 @@ function ChartPlot({ data , options  }) {
                                 value: product,
                                 __source: {
                                     fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                                    lineNumber: 44,
+                                    lineNumber: 46,
                                     columnNumber: 13
                                 },
                                 __self: this,
@@ -22917,7 +22918,7 @@ function ChartPlot({ data , options  }) {
                 className: "chart",
                 __source: {
                     fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                    lineNumber: 50,
+                    lineNumber: 52,
                     columnNumber: 7
                 },
                 __self: this,
@@ -22927,7 +22928,7 @@ function ChartPlot({ data , options  }) {
                         height: "500",
                         __source: {
                             fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                            lineNumber: 52,
+                            lineNumber: 54,
                             columnNumber: 11
                         },
                         __self: this
@@ -22935,7 +22936,7 @@ function ChartPlot({ data , options  }) {
                         className: "chart__empty",
                         __source: {
                             fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                            lineNumber: 54,
+                            lineNumber: 56,
                             columnNumber: 11
                         },
                         __self: this,
@@ -22944,7 +22945,7 @@ function ChartPlot({ data , options  }) {
                     /*#__PURE__*/ _jsxRuntime.jsx("p", {
                         __source: {
                             fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                            lineNumber: 56,
+                            lineNumber: 58,
                             columnNumber: 9
                         },
                         __self: this,
@@ -22954,7 +22955,7 @@ function ChartPlot({ data , options  }) {
                                 ,
                                 __source: {
                                     fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                                    lineNumber: 58,
+                                    lineNumber: 60,
                                     columnNumber: 13
                                 },
                                 __self: this,
@@ -23119,7 +23120,6 @@ exports.export = function(dest, destName, get) {
 },{}],"7ipiM":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-const IN_STOCK = "InStock";
 function addElementToArray(array, element) {
     if (!array.includes(element)) array.push(element);
     return array;
@@ -23152,8 +23152,7 @@ function sortAndGetInStockOffers(data) {
         };
         offerCopy.fetch_datetime = offer.fetch_datetime.slice(0, 10);
         return offerCopy;
-    })).filter((offer)=>offer.stock_info === IN_STOCK && !!offer.total_price
-    );
+    }));
 }
 function populateOffersByDate({ dates , selectedProduct , selectedRetailer , offers ,  }) {
     return dates.map((currentDate)=>offers.filter((offer)=>offer.fetch_datetime.includes(currentDate) && offer.product_name === selectedProduct && offer.retailer_name === selectedRetailer
