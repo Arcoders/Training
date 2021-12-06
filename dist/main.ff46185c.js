@@ -29653,10 +29653,11 @@ var SimpleChartPlot = /*#__PURE__*/function () {
       this.ctx.lineWidth = 0.7;
     }
   }, {
-    key: "onResize",
-    value: function onResize() {
+    key: "init",
+    value: function init() {
       var _this = this;
 
+      this.draw();
       window.addEventListener("resize", function () {
         _this.canvas.width = _this.canvas.parentElement.clientWidth;
 
@@ -30046,8 +30047,7 @@ function ChartPlot(_ref) {
       });
 
       var simpleChartPlot = new _plot.default(canvasRef.current, plotConfiguration);
-      simpleChartPlot.onResize();
-      simpleChartPlot.draw();
+      simpleChartPlot.init();
     }
   }, [_react.useRef, data, selectedRetailer, selectedProduct]);
 

@@ -23,7 +23,8 @@ class SimpleChartPlot {
     this.ctx.lineWidth = 0.7;
   }
 
-  onResize() {
+  init() {
+    this.draw();
     window.addEventListener("resize", () => {
       this.canvas.width = this.canvas.parentElement.clientWidth;
       this.draw();

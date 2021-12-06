@@ -4,20 +4,25 @@ import parseOffers from "../../utils/parsers/offers";
 import { RETAILER, PRODUCT } from "../constants";
 import "./ChartPlot.sass";
 
-function ChartPlot({ data , options }) {
+function ChartPlot({ data, options }) {
   const [selectedRetailer, setSelectedRetailer] = useState(RETAILER);
   const [selectedProduct, setSelectedProduct] = useState(PRODUCT);
   const canvasRef = useRef(null);
 
-  const { retailerNames, products, xAxis, yAxis } = parseOffers(data, selectedRetailer, selectedProduct);
-
+  const { retailerNames, products, xAxis, yAxis } = parseOffers(
+    data,
+    selectedRetailer,
+    selectedProduct
+  );
 
   useEffect(() => {
     if (canvasRef && canvasRef.current && data.length) {
-      const plotConfiguration = {...options, xAxis, yAxis};
-      const simpleChartPlot = new SimpleChartPlot(canvasRef.current, plotConfiguration);
-      simpleChartPlot.onResize();
-      simpleChartPlot.draw();
+      const plotConfiguration = { ...options, xAxis, yAxis };
+      const simpleChartPlot = new SimpleChartPlot(
+        canvasRef.current,
+        plotConfiguration
+      );
+      simpleChartPlot.init();
     }
   }, [useRef, data, selectedRetailer, selectedProduct]);
 
@@ -36,13 +41,18 @@ function ChartPlot({ data , options }) {
           onChange={handleSelectProduct}
         >
           {products.map((product) => (
-            <option key={product} value={product}>{product}</option>
+            <option key={product} value={product}>
+              {product}
+            </option>
           ))}
         </select>
       </div>
       <div className="chart">
-        {!!yAxis.length ?  <canvas ref={canvasRef} height="500" /> : <div className="chart__empty">There is no data to show</div>}
-       
+        {!!yAxis.length ? (
+          <canvas ref={canvasRef} height="500" />
+        ) : (
+          <div className="chart__empty">There is no data to show</div>
+        )}
         <p>
           {retailerNames.map((retailer) => (
             <span
