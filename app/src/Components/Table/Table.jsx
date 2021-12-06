@@ -48,7 +48,6 @@ function Table({ data: tableData, options }) {
   const tableBody = getTableBody();
   const totalPages = Math.round(data.length / options.itemsPerPage);
 
-  console.log(333)
   return (
     <div className="table container">
       <input

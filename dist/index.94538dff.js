@@ -23420,12 +23420,11 @@ function Table({ data: tableData , options  }) {
     ;
     const tableBody = getTableBody();
     const totalPages = Math.round(data.length / options.itemsPerPage);
-    console.log(333);
     return(/*#__PURE__*/ _jsxRuntime.jsxs("div", {
         className: "table container",
         __source: {
             fileName: "app/src/Components/Table/Table.jsx",
-            lineNumber: 53,
+            lineNumber: 52,
             columnNumber: 5
         },
         __self: this,
@@ -23437,7 +23436,7 @@ function Table({ data: tableData , options  }) {
                 onChange: handleOnSearch,
                 __source: {
                     fileName: "app/src/Components/Table/Table.jsx",
-                    lineNumber: 54,
+                    lineNumber: 53,
                     columnNumber: 7
                 },
                 __self: this
@@ -23445,7 +23444,7 @@ function Table({ data: tableData , options  }) {
             /*#__PURE__*/ _jsxRuntime.jsxs("table", {
                 __source: {
                     fileName: "app/src/Components/Table/Table.jsx",
-                    lineNumber: 60,
+                    lineNumber: 59,
                     columnNumber: 7
                 },
                 __self: this,
@@ -23453,21 +23452,21 @@ function Table({ data: tableData , options  }) {
                     /*#__PURE__*/ _jsxRuntime.jsx("thead", {
                         __source: {
                             fileName: "app/src/Components/Table/Table.jsx",
-                            lineNumber: 61,
+                            lineNumber: 60,
                             columnNumber: 9
                         },
                         __self: this,
                         children: /*#__PURE__*/ _jsxRuntime.jsx("tr", {
                             __source: {
                                 fileName: "app/src/Components/Table/Table.jsx",
-                                lineNumber: 62,
+                                lineNumber: 61,
                                 columnNumber: 11
                             },
                             __self: this,
                             children: options.columns.map((column)=>/*#__PURE__*/ _jsxRuntime.jsx("th", {
                                     __source: {
                                         fileName: "app/src/Components/Table/Table.jsx",
-                                        lineNumber: 64,
+                                        lineNumber: 63,
                                         columnNumber: 15
                                     },
                                     __self: this,
@@ -23479,21 +23478,21 @@ function Table({ data: tableData , options  }) {
                     /*#__PURE__*/ _jsxRuntime.jsx("tbody", {
                         __source: {
                             fileName: "app/src/Components/Table/Table.jsx",
-                            lineNumber: 68,
+                            lineNumber: 67,
                             columnNumber: 9
                         },
                         __self: this,
                         children: tableBody.map((row, index)=>/*#__PURE__*/ _jsxRuntime.jsx("tr", {
                                 __source: {
                                     fileName: "app/src/Components/Table/Table.jsx",
-                                    lineNumber: 70,
+                                    lineNumber: 69,
                                     columnNumber: 13
                                 },
                                 __self: this,
                                 children: options.rowKeys.map((key)=>/*#__PURE__*/ _jsxRuntime.jsx("td", {
                                         __source: {
                                             fileName: "app/src/Components/Table/Table.jsx",
-                                            lineNumber: 72,
+                                            lineNumber: 71,
                                             columnNumber: 17
                                         },
                                         __self: this,
@@ -23512,7 +23511,7 @@ function Table({ data: tableData , options  }) {
                 handleOnPageChange: handleOnPageChange,
                 __source: {
                     fileName: "app/src/Components/Table/Table.jsx",
-                    lineNumber: 78,
+                    lineNumber: 77,
                     columnNumber: 7
                 },
                 __self: this
