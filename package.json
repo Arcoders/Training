@@ -1,0 +1,20 @@
+{
+  "name": "sh",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ismail Haytam",
+  "license": "ISC",
+  "devDependencies": {
+    "parcel": "^2.0.1",
+    "parcel-bundler": "^1.12.5",
+    "@parcel/transformer-sass": "^2.0.1"
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  }
+}
