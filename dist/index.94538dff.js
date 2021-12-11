@@ -22841,13 +22841,17 @@ function ChartPlot({ data , options  }) {
     const [selectedRetailer, setSelectedRetailer] = _react.useState(_constants.RETAILER);
     const [selectedProduct, setSelectedProduct] = _react.useState(_constants.PRODUCT);
     const canvasRef = _react.useRef(null);
-    const { retailerNames , products , xAxis , yAxis  } = _offersDefault.default(data, selectedRetailer, selectedProduct);
+    const { retailerNames , products , prices , dates  } = _offersDefault.default({
+        data,
+        selectedRetailer,
+        selectedProduct
+    });
     _react.useEffect(()=>{
         if (canvasRef && canvasRef.current && data.length) {
             const plotConfiguration = {
                 ...options,
-                xAxis,
-                yAxis
+                xAxis: dates,
+                yAxis: prices
             };
             const simpleChartPlot = new _plotDefault.default(canvasRef.current, plotConfiguration);
             simpleChartPlot.init();
@@ -22866,7 +22870,7 @@ function ChartPlot({ data , options  }) {
         className: "container",
         __source: {
             fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-            lineNumber: 35,
+            lineNumber: 36,
             columnNumber: 5
         },
         __self: this,
@@ -22875,7 +22879,7 @@ function ChartPlot({ data , options  }) {
                 className: "search",
                 __source: {
                     fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                    lineNumber: 36,
+                    lineNumber: 37,
                     columnNumber: 7
                 },
                 __self: this,
@@ -22883,7 +22887,7 @@ function ChartPlot({ data , options  }) {
                     /*#__PURE__*/ _jsxRuntime.jsx("h3", {
                         __source: {
                             fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                            lineNumber: 37,
+                            lineNumber: 38,
                             columnNumber: 9
                         },
                         __self: this,
@@ -22895,7 +22899,7 @@ function ChartPlot({ data , options  }) {
                         onChange: handleSelectProduct,
                         __source: {
                             fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                            lineNumber: 38,
+                            lineNumber: 39,
                             columnNumber: 9
                         },
                         __self: this,
@@ -22903,7 +22907,7 @@ function ChartPlot({ data , options  }) {
                                 value: product,
                                 __source: {
                                     fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                                    lineNumber: 44,
+                                    lineNumber: 45,
                                     columnNumber: 13
                                 },
                                 __self: this,
@@ -22917,17 +22921,17 @@ function ChartPlot({ data , options  }) {
                 className: "chart",
                 __source: {
                     fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                    lineNumber: 50,
+                    lineNumber: 51,
                     columnNumber: 7
                 },
                 __self: this,
                 children: [
-                    !!yAxis.length ? /*#__PURE__*/ _jsxRuntime.jsx("canvas", {
+                    !!prices.length ? /*#__PURE__*/ _jsxRuntime.jsx("canvas", {
                         ref: canvasRef,
                         height: "500",
                         __source: {
                             fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                            lineNumber: 52,
+                            lineNumber: 53,
                             columnNumber: 11
                         },
                         __self: this
@@ -22935,7 +22939,7 @@ function ChartPlot({ data , options  }) {
                         className: "chart__empty",
                         __source: {
                             fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                            lineNumber: 54,
+                            lineNumber: 55,
                             columnNumber: 11
                         },
                         __self: this,
@@ -22944,7 +22948,7 @@ function ChartPlot({ data , options  }) {
                     /*#__PURE__*/ _jsxRuntime.jsx("p", {
                         __source: {
                             fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                            lineNumber: 56,
+                            lineNumber: 57,
                             columnNumber: 9
                         },
                         __self: this,
@@ -22954,7 +22958,7 @@ function ChartPlot({ data , options  }) {
                                 ,
                                 __source: {
                                     fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                                    lineNumber: 58,
+                                    lineNumber: 59,
                                     columnNumber: 13
                                 },
                                 __self: this,
@@ -23035,7 +23039,7 @@ class SimpleChartPlot {
         }
     }
     formatPrices() {
-        this.config.yAxis = _helpers.removeEmptyPrices(this.config.yAxis);
+        this.config.yAxis = this.config.yAxis;
         this.config.max = Math.max.apply(null, this.config.yAxis) + this.priceMargin;
         this.steps = this.config.max / 5;
         this.sections = this.config.yAxis.length;
@@ -23072,18 +23076,8 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "formateDate", ()=>formateDate
 );
-parcelHelpers.export(exports, "removeEmptyPrices", ()=>removeEmptyPrices
-);
 function formateDate(date) {
-    return (date ? date.slice(5) : date || "").replace('-', '/');
-}
-function removeEmptyPrices(prices) {
-    return prices.map((current1)=>{
-        const [price] = current1.map((current)=>current.total_price
-        );
-        if (price) return price * 10;
-        return undefined;
-    }).filter(Boolean);
+    return (date ? date.slice(5) : "").replace("-", "/");
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"ciiiV":[function(require,module,exports) {
@@ -23119,77 +23113,88 @@ exports.export = function(dest, destName, get) {
 },{}],"7ipiM":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-function addElementToArray(array, element) {
-    if (!array.includes(element)) array.push(element);
-    return array;
+var _commons = require("../commons");
+function parseOffers(params) {
+    const paramsCopy = {
+        ...params
+    };
+    return _commons.pipe(sortAndFormatDate, getGraphOptions, populatePricesByDate)(paramsCopy);
 }
+function sortAndFormatDate(params) {
+    params.data = _commons.sortByDate(params.data.map((offer)=>{
+        offer.fetch_datetime = offer.fetch_datetime.slice(0, 10);
+        return offer;
+    }));
+    return params;
+}
+function getGraphOptions(params) {
+    let retailerNames = [];
+    let products = [];
+    let dates = [];
+    params.data.forEach((offer)=>{
+        addElementToArrayIfNotExist(retailerNames, offer.retailer_name);
+        addElementToArrayIfNotExist(products, offer.product_name);
+        addElementToArrayIfNotExist(dates, offer.fetch_datetime);
+    });
+    return {
+        ...params,
+        retailerNames,
+        products,
+        dates
+    };
+}
+function populatePricesByDate(params) {
+    const dates = [];
+    const prices = [];
+    params.dates.forEach((date)=>{
+        const price = (params.data.find((data)=>data.fetch_datetime.includes(date) && data.product_name === params.selectedProduct && data.retailer_name === params.selectedRetailer
+        ) || {
+        }).total_price;
+        if (price) {
+            prices.push(price * 10);
+            dates.push(date);
+        }
+    });
+    delete params.data;
+    params.prices = prices;
+    params.dates = dates;
+    return params;
+}
+function addElementToArrayIfNotExist(array, element) {
+    if (!array.includes(element)) array.push(element);
+}
+exports.default = parseOffers;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","../commons":"8woKG"}],"8woKG":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "pipe", ()=>_pipeDefault.default
+);
+parcelHelpers.export(exports, "sortByDate", ()=>_sortByDateDefault.default
+);
+var _pipe = require("./pipe");
+var _pipeDefault = parcelHelpers.interopDefault(_pipe);
+var _sortByDate = require("./sortByDate");
+var _sortByDateDefault = parcelHelpers.interopDefault(_sortByDate);
+
+},{"./pipe":"6KJi7","./sortByDate":"9XOdk","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"6KJi7":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+const pipe = (...fns)=>(x)=>fns.reduce((v, f)=>f(v)
+        , x)
+;
+exports.default = pipe;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"9XOdk":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
 function sortByDate(array) {
     let getTimestamp = (str)=>+new Date(str)
     ;
     return array.sort((a, b)=>getTimestamp(a.fetch_datetime) - getTimestamp(b.fetch_datetime)
     );
 }
-function getGraphOptions(data) {
-    let retailerNames = [];
-    let products = [];
-    let dates = [];
-    data.forEach((offer)=>{
-        addElementToArray(retailerNames, offer.retailer_name);
-        addElementToArray(products, offer.product_name);
-        addElementToArray(dates, offer.fetch_datetime);
-    });
-    return {
-        retailerNames,
-        products,
-        dates
-    };
-}
-function sortAndGetInStockOffers(data) {
-    return sortByDate(data.map((offer)=>{
-        const offerCopy = {
-            ...offer
-        };
-        offerCopy.fetch_datetime = offer.fetch_datetime.slice(0, 10);
-        return offerCopy;
-    }));
-}
-function populateOffersByDate({ dates , selectedProduct , selectedRetailer , offers ,  }) {
-    return dates.map((currentDate)=>offers.filter((offer)=>offer.fetch_datetime.includes(currentDate) && offer.product_name === selectedProduct && offer.retailer_name === selectedRetailer
-        )
-    );
-}
-function getAxisData(dates, offers) {
-    let xAxis = [];
-    const yAxis = offers.map((offer, index)=>{
-        if (!!offer.length) {
-            xAxis.push(dates[index]);
-            return offer;
-        }
-        return null;
-    }).filter(Boolean);
-    return {
-        xAxis,
-        yAxis
-    };
-}
-function parseOffers(data, selectedRetailer, selectedProduct) {
-    const formatedProducts = sortAndGetInStockOffers(data);
-    const { retailerNames , products , dates  } = getGraphOptions(formatedProducts);
-    const populatedOffersBydate = populateOffersByDate({
-        dates,
-        selectedProduct,
-        selectedRetailer,
-        offers: data
-    });
-    const { xAxis , yAxis  } = getAxisData(dates, populatedOffersBydate);
-    return {
-        xAxis,
-        yAxis,
-        products,
-        retailerNames
-    };
-}
-exports.default = parseOffers;
+exports.default = sortByDate;
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"49cAl":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");

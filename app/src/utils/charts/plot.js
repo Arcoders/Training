@@ -1,4 +1,5 @@
-import { formateDate, removeEmptyPrices } from "./helpers";
+
+import { formateDate } from "./helpers";
 
 class SimpleChartPlot {
   constructor(canvas, config) {
@@ -77,7 +78,7 @@ class SimpleChartPlot {
   }
 
   formatPrices() {
-    this.config.yAxis = removeEmptyPrices(this.config.yAxis);
+    this.config.yAxis = this.config.yAxis;
     this.config.max =
       Math.max.apply(null, this.config.yAxis) + this.priceMargin;
     this.steps = this.config.max / 5;

@@ -1,85 +1,69 @@
-function addElementToArray(array, element) {
-  if (!array.includes(element)) {
-    array.push(element);
-  }
-  return array;
+import { pipe, sortByDate } from "../commons";
+
+function parseOffers(params) {
+  const paramsCopy = { ...params };
+  return pipe(
+    sortAndFormatDate,
+    getGraphOptions,
+    populatePricesByDate
+  )(paramsCopy);
 }
 
-function sortByDate(array) {
-  let getTimestamp = (str) => +new Date(str);
-  return array.sort(
-    (a, b) => getTimestamp(a.fetch_datetime) - getTimestamp(b.fetch_datetime)
+function sortAndFormatDate(params) {
+  params.data = sortByDate(
+    params.data.map((offer) => {
+      offer.fetch_datetime = offer.fetch_datetime.slice(0, 10);
+      return offer;
+    })
   );
+  return params;
 }
 
-function getGraphOptions(data) {
+function getGraphOptions(params) {
   let retailerNames = [];
   let products = [];
   let dates = [];
 
-  data.forEach((offer) => {
-    addElementToArray(retailerNames, offer.retailer_name);
-    addElementToArray(products, offer.product_name);
-    addElementToArray(dates, offer.fetch_datetime);
+  params.data.forEach((offer) => {
+    addElementToArrayIfNotExist(retailerNames, offer.retailer_name);
+    addElementToArrayIfNotExist(products, offer.product_name);
+    addElementToArrayIfNotExist(dates, offer.fetch_datetime);
   });
 
-  return { retailerNames, products, dates };
+  return { ...params, retailerNames, products, dates };
 }
 
-function sortAndGetInStockOffers(data) {
-  return sortByDate(
-    data.map((offer) => {
-      const offerCopy = { ...offer };
-      offerCopy.fetch_datetime = offer.fetch_datetime.slice(0, 10);
-      return offerCopy;
-    })
-  );
-}
+function populatePricesByDate(params) {
+  const dates = [];
+  const prices = [];
+  
+  params.dates.forEach((date) => {
+    const price = (
+      params.data.find(
+        (data) =>
+          data.fetch_datetime.includes(date) &&
+          data.product_name === params.selectedProduct &&
+          data.retailer_name === params.selectedRetailer
+      ) || {}
+    ).total_price;
 
-function populateOffersByDate({
-  dates,
-  selectedProduct,
-  selectedRetailer,
-  offers,
-}) {
-  return dates.map((currentDate) =>
-    offers.filter(
-      (offer) =>
-        offer.fetch_datetime.includes(currentDate) &&
-        offer.product_name === selectedProduct &&
-        offer.retailer_name === selectedRetailer
-    )
-  );
-}
-
-function getAxisData(dates, offers) {
-  let xAxis = [];
-  const yAxis = offers
-    .map((offer, index) => {
-      if (!!offer.length) {
-        xAxis.push(dates[index]);
-        return offer;
-      }
-      return null;
-    })
-    .filter(Boolean);
-
-  return { xAxis, yAxis };
-}
-
-function parseOffers(data, selectedRetailer, selectedProduct) {
-  const formatedProducts = sortAndGetInStockOffers(data);
-  const { retailerNames, products, dates } = getGraphOptions(formatedProducts);
-
-  const populatedOffersBydate = populateOffersByDate({
-    dates,
-    selectedProduct,
-    selectedRetailer,
-    offers: data,
+    if (price) {
+      prices.push(price * 10);
+      dates.push(date);
+    }
   });
 
-  const { xAxis, yAxis } = getAxisData(dates, populatedOffersBydate);
-  return { xAxis, yAxis, products, retailerNames };
+  delete params.data;
+
+  params.prices = prices;
+  params.dates = dates;
+  return params;
+}
+
+function addElementToArrayIfNotExist(array, element) {
+  if (!array.includes(element)) {
+    array.push(element);
+  }
 }
 
 export default parseOffers;

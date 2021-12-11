@@ -9,15 +9,16 @@ function ChartPlot({ data, options }) {
   const [selectedProduct, setSelectedProduct] = useState(PRODUCT);
   const canvasRef = useRef(null);
 
-  const { retailerNames, products, xAxis, yAxis } = parseOffers(
-    data,
+
+  const { retailerNames, products, prices, dates } = parseOffers(
+    {data,
     selectedRetailer,
-    selectedProduct
+    selectedProduct}
   );
 
   useEffect(() => {
     if (canvasRef && canvasRef.current && data.length) {
-      const plotConfiguration = { ...options, xAxis, yAxis };
+      const plotConfiguration = { ...options, xAxis: dates, yAxis: prices };
       const simpleChartPlot = new SimpleChartPlot(
         canvasRef.current,
         plotConfiguration
@@ -48,7 +49,7 @@ function ChartPlot({ data, options }) {
         </select>
       </div>
       <div className="chart">
-        {!!yAxis.length ? (
+        {!!prices.length ? (
           <canvas ref={canvasRef} height="500" />
         ) : (
           <div className="chart__empty">There is no data to show</div>
