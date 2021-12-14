@@ -42,14 +42,10 @@
 
 .chart canvas {
   background: #F8F9FB;
-  width: 100%;
-  height: 500px;
 }
 .chart__empty {
   background: #F8F9FB;
   color: #5d5d81;
-  width: 100%;
-  height: 500px;
   display: flex;
   align-items: center;
   justify-content: center;

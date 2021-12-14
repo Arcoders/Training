@@ -1,5 +1,5 @@
 
-import { formateDate } from "./helpers";
+import { formateDate } from "../commons/formatDate";
 
 class SimpleChartPlot {
   constructor(canvas, config) {
