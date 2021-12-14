@@ -22830,8 +22830,8 @@ var _jsxRuntime = require("react/jsx-runtime");
 var _react = require("react");
 var _reactDefault = parcelHelpers.interopDefault(_react);
 // import SimpleChartPlot from "../../utils/charts/plot";
-var _newPlot = require("../../utils/charts/newPlot");
-var _newPlotDefault = parcelHelpers.interopDefault(_newPlot);
+var _plot = require("../../utils/charts/plot");
+var _plotDefault = parcelHelpers.interopDefault(_plot);
 var _offers = require("../../utils/parsers/offers");
 var _offersDefault = parcelHelpers.interopDefault(_offers);
 var _constants = require("../constants");
@@ -22850,7 +22850,7 @@ function ChartPlot({ data , options  }) {
     _react.useEffect(()=>{
         if (canvasRef && canvasRef.current && data.length) {
             const canvas = canvasRef.current;
-            _newPlotDefault.default({
+            _plotDefault.default({
                 dots,
                 canvas
             });
@@ -22981,7 +22981,7 @@ $RefreshReg$(_c, "ChartPlot");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-runtime":"6Ds2u","react":"4mchR","../../utils/parsers/offers":"7ipiM","../constants":"49cAl","./ChartPlot.sass":"ddHq8","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"9pz13","../../utils/charts/newPlot":"gwSNL"}],"7ipiM":[function(require,module,exports) {
+},{"react/jsx-runtime":"6Ds2u","react":"4mchR","../../utils/parsers/offers":"7ipiM","../constants":"49cAl","./ChartPlot.sass":"ddHq8","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"9pz13","../../utils/charts/plot":"3Piwl"}],"7ipiM":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _commons = require("../commons");
@@ -23016,7 +23016,7 @@ function getGraphOptions(params) {
 }
 function populatePricesByDate(params) {
     const dots = [];
-    params.dates.forEach((date)=>{
+    params.dates.forEach((date, i)=>{
         const price = (params.data.find((data)=>data.fetch_datetime.includes(date) && data.product_name === params.selectedProduct && data.retailer_name === params.selectedRetailer
         ) || {
         }).total_price;
@@ -23270,7 +23270,7 @@ function registerExportsForReactRefresh(module) {
     }
 }
 
-},{"react-refresh/runtime":"aeH4U"}],"gwSNL":[function(require,module,exports) {
+},{"react-refresh/runtime":"aeH4U"}],"3Piwl":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _canvasUtils = require("./canvasUtils");
@@ -23288,9 +23288,9 @@ class Plot {
         this.dots = config.dots;
         this.unitsPerTickX = config.unitsPerTickX;
         this.unitsPerTickY = config.unitsPerTickY;
-        this.tickSize = 2;
+        this.tickSize = 3;
         this.margin = 10;
-        this.padding = 20;
+        this.padding = 25;
         this.computeProps();
         this.CANVAS_UTILS = _canvasUtilsDefault.default(this);
         this.drawXAxis();
@@ -23304,7 +23304,7 @@ class Plot {
         this.rangeX = this.maxX - this.minY;
         this.rangeY = this.maxY - this.minY;
         this.numXTicks = 20;
-        this.numYTicks = 20;
+        this.numYTicks = 5;
         this.scaleX = this.width / this.rangeX;
         this.scaleY = this.height / this.rangeY;
     }
@@ -23365,7 +23365,7 @@ class Plot {
             ,
             y: ()=>this.y + this.height + this.margin
         };
-        const label = (number)=>Math.round((number + 1) * this.maxX / this.numXTicks)
+        const label = (number)=>this.dots[number].x
         ;
         this.CANVAS_UTILS.printLabels({
             coordinates,
@@ -23394,8 +23394,9 @@ class Plot {
             ,
             y: (number)=>number * this.height / this.numYTicks + this.y
         };
-        const label = (number)=>Math.round(this.maxY - number * this.maxY / this.numYTicks)
+        const label = (number)=>((this.height - number) / this.y).toFixed(2)
         ;
+        console.log(this.dots);
         this.CANVAS_UTILS.printLabels({
             coordinates,
             totalTicks: this.numXTicks,
@@ -23422,7 +23423,7 @@ function init(settings) {
 }
 exports.default = init;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","./canvasUtils":"49frQ"}],"49frQ":[function(require,module,exports) {
+},{"./canvasUtils":"49frQ","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"49frQ":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 const DEFAULT_AXIS_COLOR = "#555";
@@ -23432,9 +23433,9 @@ const DEFAULT_TEXT_BASE_LINE = "middle";
 const DEFAULT_STROKE_STYLE = "black";
 const DEFAULT_FILL_STYLE = "black";
 const DEFAULT_TEXT_ALIGN = "center";
-const DEFAULT_CIRCLE_RADIUS = 5;
+const DEFAULT_CIRCLE_RADIUS = 3;
 const canvasUtils = (settings)=>{
-    const { ctx , scaleX , scaleY , x , y , height , dots  } = settings;
+    const { ctx , scaleX , scaleY , x , y , height , width , dots  } = settings;
     function drawLine({ from , to , color =DEFAULT_AXIS_COLOR , lineWidth =DEFAULT_LINE_WIDTH ,  }) {
         ctx.save();
         ctx.beginPath();
@@ -23479,7 +23480,8 @@ const canvasUtils = (settings)=>{
         ctx.moveTo(firstPoint.x * scaleX, firstPoint.y * scaleY);
         for(let index = 0; index < dots.length; index++){
             const point = dots[index];
-            const currentX = index * 30;
+            const currentX = index * scaleX + 50;
+            console.log(currentX);
             const currentY = point.y * scaleY;
             ctx.lineTo(currentX, currentY);
             ctx.stroke();

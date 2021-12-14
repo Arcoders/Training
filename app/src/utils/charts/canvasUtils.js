@@ -5,11 +5,11 @@ const DEFAULT_TEXT_BASE_LINE = "middle";
 const DEFAULT_STROKE_STYLE = "black";
 const DEFAULT_FILL_STYLE = "black";
 const DEFAULT_TEXT_ALIGN = "center";
-const DEFAULT_CIRCLE_RADIUS = 5;
+const DEFAULT_CIRCLE_RADIUS = 3;
 
 const canvasUtils = (settings => {
 
-    const { ctx, scaleX, scaleY, x, y, height, dots} = settings;
+    const { ctx, scaleX, scaleY, x, y, height, width, dots} = settings;
 
     function drawLine({
         from,
@@ -82,7 +82,8 @@ const canvasUtils = (settings => {
       
         for (let index = 0; index < dots.length; index++) {
           const point = dots[index];
-          const currentX = (index) * 30 ;
+          const currentX = (index * scaleX) +  50;
+          console.log(currentX)
           const currentY = point.y * scaleY;
           ctx.lineTo(currentX, currentY);
           ctx.stroke();

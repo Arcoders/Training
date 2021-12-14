@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 // import SimpleChartPlot from "../../utils/charts/plot";
-import SimpleChartPlot from "../../utils/charts/newPlot";
+import SimpleChartPlot from "../../utils/charts/plot";
 import parseOffers from "../../utils/parsers/offers";
 import { RETAILER, PRODUCT } from "../constants";
 import "./ChartPlot.sass";

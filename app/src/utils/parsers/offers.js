@@ -36,7 +36,7 @@ function getGraphOptions(params) {
 function populatePricesByDate(params) {
   const dots = [];
 
-  params.dates.forEach((date) => {
+  params.dates.forEach((date, i) => {
     const price = (
       params.data.find(
         (data) =>
