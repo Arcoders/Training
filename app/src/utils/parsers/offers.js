@@ -1,4 +1,4 @@
-import { pipe, sortByDate } from "../commons";
+import { pipe, sortByDate, formatDate } from "../commons";
 
 function parseOffers(params) {
   const paramsCopy = { ...params };
@@ -34,9 +34,8 @@ function getGraphOptions(params) {
 }
 
 function populatePricesByDate(params) {
-  const dates = [];
-  const prices = [];
-  
+  const dots = [];
+
   params.dates.forEach((date) => {
     const price = (
       params.data.find(
@@ -47,16 +46,12 @@ function populatePricesByDate(params) {
       ) || {}
     ).total_price;
 
-    if (price) {
-      prices.push(price * 10);
-      dates.push(date);
-    }
+    if (price) dots.push({ x: formatDate(date), y: price })
   });
 
   delete params.data;
 
-  params.prices = prices;
-  params.dates = dates;
+  params.dots = dots;
   return params;
 }
 

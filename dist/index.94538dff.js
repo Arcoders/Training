@@ -22829,8 +22829,9 @@ parcelHelpers.defineInteropFlag(exports);
 var _jsxRuntime = require("react/jsx-runtime");
 var _react = require("react");
 var _reactDefault = parcelHelpers.interopDefault(_react);
-var _plot = require("../../utils/charts/plot");
-var _plotDefault = parcelHelpers.interopDefault(_plot);
+// import SimpleChartPlot from "../../utils/charts/plot";
+var _newPlot = require("../../utils/charts/newPlot");
+var _newPlotDefault = parcelHelpers.interopDefault(_newPlot);
 var _offers = require("../../utils/parsers/offers");
 var _offersDefault = parcelHelpers.interopDefault(_offers);
 var _constants = require("../constants");
@@ -22841,20 +22842,18 @@ function ChartPlot({ data , options  }) {
     const [selectedRetailer, setSelectedRetailer] = _react.useState(_constants.RETAILER);
     const [selectedProduct, setSelectedProduct] = _react.useState(_constants.PRODUCT);
     const canvasRef = _react.useRef(null);
-    const { retailerNames , products , prices , dates  } = _offersDefault.default({
+    const { retailerNames , products , dots  } = _offersDefault.default({
         data,
         selectedRetailer,
         selectedProduct
     });
     _react.useEffect(()=>{
         if (canvasRef && canvasRef.current && data.length) {
-            const plotConfiguration = {
-                ...options,
-                xAxis: dates,
-                yAxis: prices
-            };
-            const simpleChartPlot = new _plotDefault.default(canvasRef.current, plotConfiguration);
-            simpleChartPlot.init();
+            const canvas = canvasRef.current;
+            _newPlotDefault.default({
+                dots,
+                canvas
+            });
         }
     }, [
         _react.useRef,
@@ -22870,7 +22869,7 @@ function ChartPlot({ data , options  }) {
         className: "container",
         __source: {
             fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-            lineNumber: 36,
+            lineNumber: 32,
             columnNumber: 5
         },
         __self: this,
@@ -22879,7 +22878,7 @@ function ChartPlot({ data , options  }) {
                 className: "search",
                 __source: {
                     fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                    lineNumber: 37,
+                    lineNumber: 33,
                     columnNumber: 7
                 },
                 __self: this,
@@ -22887,7 +22886,7 @@ function ChartPlot({ data , options  }) {
                     /*#__PURE__*/ _jsxRuntime.jsx("h3", {
                         __source: {
                             fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                            lineNumber: 38,
+                            lineNumber: 34,
                             columnNumber: 9
                         },
                         __self: this,
@@ -22899,7 +22898,7 @@ function ChartPlot({ data , options  }) {
                         onChange: handleSelectProduct,
                         __source: {
                             fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                            lineNumber: 39,
+                            lineNumber: 35,
                             columnNumber: 9
                         },
                         __self: this,
@@ -22907,7 +22906,7 @@ function ChartPlot({ data , options  }) {
                                 value: product,
                                 __source: {
                                     fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                                    lineNumber: 45,
+                                    lineNumber: 41,
                                     columnNumber: 13
                                 },
                                 __self: this,
@@ -22921,17 +22920,17 @@ function ChartPlot({ data , options  }) {
                 className: "chart",
                 __source: {
                     fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                    lineNumber: 51,
+                    lineNumber: 47,
                     columnNumber: 7
                 },
                 __self: this,
                 children: [
-                    !!prices.length ? /*#__PURE__*/ _jsxRuntime.jsx("canvas", {
+                    !!dots.length ? /*#__PURE__*/ _jsxRuntime.jsx("canvas", {
+                        id: "canvas",
                         ref: canvasRef,
-                        height: "500",
                         __source: {
                             fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                            lineNumber: 53,
+                            lineNumber: 49,
                             columnNumber: 11
                         },
                         __self: this
@@ -22939,7 +22938,7 @@ function ChartPlot({ data , options  }) {
                         className: "chart__empty",
                         __source: {
                             fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                            lineNumber: 55,
+                            lineNumber: 51,
                             columnNumber: 11
                         },
                         __self: this,
@@ -22948,7 +22947,7 @@ function ChartPlot({ data , options  }) {
                     /*#__PURE__*/ _jsxRuntime.jsx("p", {
                         __source: {
                             fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                            lineNumber: 57,
+                            lineNumber: 53,
                             columnNumber: 9
                         },
                         __self: this,
@@ -22958,7 +22957,7 @@ function ChartPlot({ data , options  }) {
                                 ,
                                 __source: {
                                     fileName: "app/src/Components/ChartPlot/ChartPlot.jsx",
-                                    lineNumber: 59,
+                                    lineNumber: 55,
                                     columnNumber: 13
                                 },
                                 __self: this,
@@ -22982,135 +22981,7 @@ $RefreshReg$(_c, "ChartPlot");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-runtime":"6Ds2u","react":"4mchR","../../utils/charts/plot":"3Piwl","../../utils/parsers/offers":"7ipiM","../constants":"49cAl","./ChartPlot.sass":"ddHq8","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"9pz13"}],"3Piwl":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _helpers = require("./helpers");
-class SimpleChartPlot {
-    constructor(canvas, config){
-        this.canvas = canvas;
-        this.config = {
-            ...config
-        };
-        this.ctx = canvas.getContext("2d");
-        this.priceMargin = config.priceMargin;
-        this.canvas.width = canvas.parentElement.clientWidth;
-        this.formatPrices();
-    }
-    setScale() {
-        this.yScale = (this.canvas.height - this.config.columnSize - this.config.margin) / (this.config.max - this.config.min);
-        this.config.xScale = (this.canvas.width - this.config.rowSize) / this.sections;
-    }
-    beginPath() {
-        this.ctx.beginPath();
-        this.ctx.lineWidth = 0.7;
-    }
-    init() {
-        this.draw();
-        window.addEventListener("resize", ()=>{
-            this.canvas.width = this.canvas.parentElement.clientWidth;
-            this.draw();
-        });
-    }
-    closePahtAndTranslate() {
-        this.ctx.stroke();
-        this.ctx.translate(this.config.rowSize, this.canvas.height + this.config.min * this.yScale);
-        this.ctx.scale(1, -1 * this.yScale);
-    }
-    drawHorizontalLines() {
-        var lines = 0;
-        for(let scale = this.config.max; scale >= this.config.min; scale = scale - this.steps){
-            var y = this.config.columnSize + this.yScale * lines * this.steps;
-            const text = Number(scale / 10).toFixed(2);
-            this.ctx.fillText(text, this.config.margin, y);
-            this.ctx.moveTo(this.config.rowSize, y);
-            this.ctx.lineTo(this.canvas.width, y);
-            lines++;
-        }
-    }
-    drawVerticalLines() {
-        for(let i = 2; i <= this.sections; i++){
-            var x = i * this.config.xScale;
-            const date = _helpers.formateDate(this.config.xAxis[i]);
-            if (this.config.xAxis.length <= 30) this.config.skip = 1;
-            if (i % this.config.skip == 0) this.ctx.fillText(date, x, this.config.columnSize - this.config.margin);
-            this.ctx.moveTo(x, this.config.columnSize);
-            this.ctx.lineTo(x, this.canvas.height - this.config.margin);
-        }
-    }
-    formatPrices() {
-        this.config.yAxis = this.config.yAxis;
-        this.config.max = Math.max.apply(null, this.config.yAxis) + this.priceMargin;
-        this.steps = this.config.max / 5;
-        this.sections = this.config.yAxis.length;
-    }
-    setDefaultStyles() {
-        this.ctx.fillStyle = "#273043";
-        this.ctx.font = "14px Arial";
-        this.ctx.strokeStyle = "#f1f1f1";
-    }
-    drawLines() {
-        this.beginPath();
-        this.ctx.strokeStyle = "#55868c";
-        this.ctx.moveTo(0, this.config.yAxis[0]);
-        for(let i = 1; i < this.sections; i++)this.ctx.lineTo(i * this.config.xScale, this.config.yAxis[i]);
-        this.ctx.stroke();
-    }
-    drawGrid() {
-        this.beginPath();
-        this.drawVerticalLines();
-        this.drawHorizontalLines();
-        this.closePahtAndTranslate();
-    }
-    draw() {
-        this.setDefaultStyles();
-        this.setScale();
-        this.drawGrid();
-        this.drawLines();
-    }
-}
-exports.default = SimpleChartPlot;
-
-},{"./helpers":"ejdL1","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"ejdL1":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "formateDate", ()=>formateDate
-);
-function formateDate(date) {
-    return (date ? date.slice(5) : "").replace("-", "/");
-}
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"ciiiV":[function(require,module,exports) {
-exports.interopDefault = function(a) {
-    return a && a.__esModule ? a : {
-        default: a
-    };
-};
-exports.defineInteropFlag = function(a) {
-    Object.defineProperty(a, '__esModule', {
-        value: true
-    });
-};
-exports.exportAll = function(source, dest) {
-    Object.keys(source).forEach(function(key) {
-        if (key === 'default' || key === '__esModule' || dest.hasOwnProperty(key)) return;
-        Object.defineProperty(dest, key, {
-            enumerable: true,
-            get: function() {
-                return source[key];
-            }
-        });
-    });
-    return dest;
-};
-exports.export = function(dest, destName, get) {
-    Object.defineProperty(dest, destName, {
-        enumerable: true,
-        get: get
-    });
-};
-
-},{}],"7ipiM":[function(require,module,exports) {
+},{"react/jsx-runtime":"6Ds2u","react":"4mchR","../../utils/parsers/offers":"7ipiM","../constants":"49cAl","./ChartPlot.sass":"ddHq8","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"9pz13","../../utils/charts/newPlot":"gwSNL"}],"7ipiM":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _commons = require("../commons");
@@ -23144,20 +23015,18 @@ function getGraphOptions(params) {
     };
 }
 function populatePricesByDate(params) {
-    const dates = [];
-    const prices = [];
+    const dots = [];
     params.dates.forEach((date)=>{
         const price = (params.data.find((data)=>data.fetch_datetime.includes(date) && data.product_name === params.selectedProduct && data.retailer_name === params.selectedRetailer
         ) || {
         }).total_price;
-        if (price) {
-            prices.push(price * 10);
-            dates.push(date);
-        }
+        if (price) dots.push({
+            x: _commons.formatDate(date),
+            y: price
+        });
     });
     delete params.data;
-    params.prices = prices;
-    params.dates = dates;
+    params.dots = dots;
     return params;
 }
 function addElementToArrayIfNotExist(array, element) {
@@ -23165,19 +23034,53 @@ function addElementToArrayIfNotExist(array, element) {
 }
 exports.default = parseOffers;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","../commons":"8woKG"}],"8woKG":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","../commons":"8woKG"}],"ciiiV":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, '__esModule', {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === 'default' || key === '__esModule' || dest.hasOwnProperty(key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
+
+},{}],"8woKG":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "pipe", ()=>_pipeDefault.default
 );
 parcelHelpers.export(exports, "sortByDate", ()=>_sortByDateDefault.default
 );
+parcelHelpers.export(exports, "formatDate", ()=>_formatDateDefault.default
+);
 var _pipe = require("./pipe");
 var _pipeDefault = parcelHelpers.interopDefault(_pipe);
 var _sortByDate = require("./sortByDate");
 var _sortByDateDefault = parcelHelpers.interopDefault(_sortByDate);
+var _formatDate = require("./formatDate");
+var _formatDateDefault = parcelHelpers.interopDefault(_formatDate);
 
-},{"./pipe":"6KJi7","./sortByDate":"9XOdk","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"6KJi7":[function(require,module,exports) {
+},{"./pipe":"6KJi7","./sortByDate":"9XOdk","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","./formatDate":"eRuAp"}],"6KJi7":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 const pipe = (...fns)=>(x)=>fns.reduce((v, f)=>f(v)
@@ -23195,6 +23098,14 @@ function sortByDate(array) {
     );
 }
 exports.default = sortByDate;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"eRuAp":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+function formatDate(date) {
+    return (date ? date.slice(5) : "").replace("-", "/");
+}
+exports.default = formatDate;
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"49cAl":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -23359,7 +23270,240 @@ function registerExportsForReactRefresh(module) {
     }
 }
 
-},{"react-refresh/runtime":"aeH4U"}],"iMMwR":[function(require,module,exports) {
+},{"react-refresh/runtime":"aeH4U"}],"gwSNL":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _canvasUtils = require("./canvasUtils");
+var _canvasUtilsDefault = parcelHelpers.interopDefault(_canvasUtils);
+class Plot {
+    constructor(config){
+        this.canvas = config.canvas;
+        this.ctx = this.canvas.getContext("2d");
+        this.canvas.width = this.canvas.parentElement.clientWidth;
+        this.canvas.height = 400;
+        this.minX = config.minX;
+        this.minY = config.minY;
+        this.maxX = config.maxX;
+        this.maxY = config.maxY;
+        this.dots = config.dots;
+        this.unitsPerTickX = config.unitsPerTickX;
+        this.unitsPerTickY = config.unitsPerTickY;
+        this.tickSize = 2;
+        this.margin = 10;
+        this.padding = 20;
+        this.computeProps();
+        this.CANVAS_UTILS = _canvasUtilsDefault.default(this);
+        this.drawXAxis();
+        this.drawYAxis();
+    }
+    computeProps() {
+        this.x = this.padding * 2;
+        this.y = this.padding * 2;
+        this.width = this.canvas.width - this.x * 2;
+        this.height = this.canvas.height - this.y * 2;
+        this.rangeX = this.maxX - this.minY;
+        this.rangeY = this.maxY - this.minY;
+        this.numXTicks = 20;
+        this.numYTicks = 20;
+        this.scaleX = this.width / this.rangeX;
+        this.scaleY = this.height / this.rangeY;
+    }
+    add() {
+        this.CANVAS_UTILS.drawTrajectory();
+    }
+    drawYAxis() {
+        const from = {
+            x: this.x,
+            y: this.y
+        };
+        const to = {
+            x: this.x,
+            y: this.y + this.height
+        };
+        this.CANVAS_UTILS.drawLine({
+            from,
+            to
+        });
+        this.splitYaxis();
+        this.addYaxisLabels();
+    }
+    drawXAxis() {
+        const from = {
+            x: this.x,
+            y: this.y + this.height
+        };
+        const to = {
+            x: this.x + this.width,
+            y: this.y + this.height
+        };
+        this.CANVAS_UTILS.drawLine({
+            ctx: this.ctx,
+            from,
+            to
+        });
+        this.splitXaxis();
+        this.addXaxisLabels();
+    }
+    splitXaxis() {
+        const coordinates = {
+            x: (number)=>number * this.width / this.numXTicks + this.x
+            ,
+            y: ()=>this.y + this.height
+        };
+        this.CANVAS_UTILS.drawTicks({
+            totalTicks: this.numYTicks,
+            coordinates,
+            horizontalTick: this.tickSize
+        });
+    }
+    addXaxisLabels() {
+        this.CANVAS_UTILS.resetStyles({
+            ctx: this.ctx
+        });
+        const coordinates = {
+            x: (number)=>(number + 1) * this.width / this.numXTicks + this.x
+            ,
+            y: ()=>this.y + this.height + this.margin
+        };
+        const label = (number)=>Math.round((number + 1) * this.maxX / this.numXTicks)
+        ;
+        this.CANVAS_UTILS.printLabels({
+            coordinates,
+            totalTicks: this.numXTicks,
+            label
+        });
+    }
+    splitYaxis() {
+        const coordinates = {
+            x: ()=>this.x
+            ,
+            y: (number)=>number * this.height / this.numYTicks + this.y
+        };
+        this.CANVAS_UTILS.drawTicks({
+            totalTicks: this.numYTicks,
+            coordinates,
+            verticalTick: this.tickSize
+        });
+    }
+    addYaxisLabels() {
+        this.CANVAS_UTILS.resetStyles({
+            textAlign: "right"
+        });
+        const coordinates = {
+            x: ()=>this.x - this.margin
+            ,
+            y: (number)=>number * this.height / this.numYTicks + this.y
+        };
+        const label = (number)=>Math.round(this.maxY - number * this.maxY / this.numYTicks)
+        ;
+        this.CANVAS_UTILS.printLabels({
+            coordinates,
+            totalTicks: this.numXTicks,
+            label
+        });
+    }
+    transformContext() {
+        this.ctx.translate(this.x, this.y + this.height);
+        this.ctx.scale(1, -1);
+    }
+}
+function init(settings) {
+    var myLineChart = new Plot({
+        canvasId: "canvas",
+        minX: 0,
+        minY: 0,
+        maxX: settings.dots.length,
+        maxY: 7,
+        unitsPerTickX: 10,
+        unitsPerTickY: 10,
+        ...settings
+    });
+    myLineChart.add();
+}
+exports.default = init;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","./canvasUtils":"49frQ"}],"49frQ":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+const DEFAULT_AXIS_COLOR = "#555";
+const DEFAULT_LINE_WIDTH = 1;
+const DEFAULT_FONT = "12pt Calibri";
+const DEFAULT_TEXT_BASE_LINE = "middle";
+const DEFAULT_STROKE_STYLE = "black";
+const DEFAULT_FILL_STYLE = "black";
+const DEFAULT_TEXT_ALIGN = "center";
+const DEFAULT_CIRCLE_RADIUS = 5;
+const canvasUtils = (settings)=>{
+    const { ctx , scaleX , scaleY , x , y , height , dots  } = settings;
+    function drawLine({ from , to , color =DEFAULT_AXIS_COLOR , lineWidth =DEFAULT_LINE_WIDTH ,  }) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(from.x, from.y);
+        ctx.lineTo(to.x, to.y);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = lineWidth;
+        ctx.stroke();
+    }
+    function drawTicks({ totalTicks , coordinates , horizontalTick =0 , verticalTick =0 ,  }) {
+        for(let i = 1; i <= totalTicks; i++){
+            ctx.beginPath();
+            ctx.moveTo(coordinates.x(i), coordinates.y(i));
+            ctx.lineTo(coordinates.x(i) + verticalTick, coordinates.y(i) - horizontalTick);
+            ctx.stroke();
+        }
+    }
+    function resetStyles({ font =DEFAULT_FONT , fillStyle =DEFAULT_FILL_STYLE , textAlign =DEFAULT_TEXT_ALIGN , textBaseline =DEFAULT_TEXT_BASE_LINE , strokeStyle =DEFAULT_STROKE_STYLE ,  }) {
+        ctx.font = font;
+        ctx.fillStyle = fillStyle;
+        ctx.textAlign = textAlign;
+        ctx.textBaseline = textBaseline;
+        ctx.strokeStyle = strokeStyle;
+    }
+    function printLabels({ coordinates , label , totalTicks  }) {
+        for(let number = 0; number < totalTicks; number++){
+            ctx.save();
+            ctx.translate(coordinates.x(number), coordinates.y(number));
+            ctx.fillText(label(number), 0, 0);
+            ctx.restore();
+        }
+    }
+    function drawTrajectory() {
+        ctx.save();
+        ctx.translate(x, y + height);
+        ctx.scale(1, -1);
+        ctx.lineWidth = DEFAULT_LINE_WIDTH;
+        ctx.strokeStyle = DEFAULT_STROKE_STYLE;
+        ctx.fillStyle = DEFAULT_FILL_STYLE;
+        ctx.beginPath();
+        const [firstPoint] = dots;
+        ctx.moveTo(firstPoint.x * scaleX, firstPoint.y * scaleY);
+        for(let index = 0; index < dots.length; index++){
+            const point = dots[index];
+            const currentX = index * 30;
+            const currentY = point.y * scaleY;
+            ctx.lineTo(currentX, currentY);
+            ctx.stroke();
+            ctx.closePath();
+            ctx.beginPath();
+            ctx.arc(currentX, currentY, DEFAULT_CIRCLE_RADIUS, 0, 2 * Math.PI, false);
+            ctx.fill();
+            ctx.closePath();
+            ctx.beginPath();
+            ctx.moveTo(currentX, currentY);
+        }
+        ctx.restore();
+    }
+    return {
+        drawLine,
+        drawTicks,
+        resetStyles,
+        printLabels,
+        drawTrajectory
+    };
+};
+exports.default = canvasUtils;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"iMMwR":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _table = require("./Table");
