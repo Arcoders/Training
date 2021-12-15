@@ -1,5 +1,5 @@
 
-import { formateDate } from "./helpers";
+import { formatDate } from "./helpers";
 
 class SimpleChartPlot {
   constructor(canvas, config) {
@@ -63,7 +63,7 @@ class SimpleChartPlot {
     for (let i = 2; i <= this.sections; i++) {
       var x = i * this.config.xScale;
 
-      const date = formateDate(this.config.xAxis[i]);
+      const date = formatDate(this.config.xAxis[i]);
       if (this.config.xAxis.length <= 30) {
         this.config.skip = 1;
       }
