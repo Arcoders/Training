@@ -83,7 +83,6 @@ const canvasUtils = (settings => {
         for (let index = 0; index < dots.length; index++) {
           const point = dots[index];
           const currentX = (index * scaleX) +  50;
-          console.log(currentX)
           const currentY = point.y * scaleY;
           ctx.lineTo(currentX, currentY);
           ctx.stroke();
